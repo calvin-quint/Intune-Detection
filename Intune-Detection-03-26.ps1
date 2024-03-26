@@ -1,5 +1,5 @@
 # Set the minimum version required for 7-Zip
-$MinimumVersion = '24.01.00.0'
+$MinimumVersion = '23.01.00.0'
 
 # Define the registry path where 7-Zip information is stored
 $registryPath = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'
