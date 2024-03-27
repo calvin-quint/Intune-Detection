@@ -7,8 +7,6 @@ $registryPath = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'
 # Query the registry for information about 7-Zip
 $7Zip = Get-ItemProperty -Path $registryPath | Where-Object { $_.DisplayName -like '*7-Zip*' }
 
-$exitCode = 0
-
 # If 7-Zip is found
 if ($7Zip) {
     # Retrieve the version of the installed 7-Zip
@@ -23,24 +21,25 @@ if ($7Zip) {
         Write-Output "Uninstalling 7-Zip version $Version..."
         
         # Define the uninstallation command
-        $UninstallCommand = "/x", "`"$($7ZipProductCode)`"", "/qn"
+        $UninstallCommand = "/x `"$($7ZipProductCode)`" /qn"
         
         # Attempt to uninstall 7-Zip
         $process = Start-Process "msiexec.exe" -ArgumentList $UninstallCommand -PassThru -Wait
         
         # Check if uninstallation was successful
         if ($process.ExitCode -eq 0) {
-            Write-Output "7-Zip version $Version has been uninstalled."
+            Write-Output "7-Zip version $Version has been uninstalled. Exit Code: $($process.ExitCode)"
+            exit 0
         } else {
             Write-Output "Failed to uninstall 7-Zip. Exit code: $($process.ExitCode)"
-            $exitCode = 1
+            exit 1
         }
     } else {
-        Write-Output "No action required. 7-Zip version meets minimum requirement."
+        Write-Output "No action required. 7-Zip version meets minimum requirement. Exit Code: $($process.ExitCode)"
+        exit 0
     }
 } else {
-    # If 7-Zip is not found
-    Write-Output "7-Zip is not installed."
-    $exitCode = 1
+    # If 7-Zip is not found 
+    Write-Output "7-Zip is not installed. Exit Code: $($process.ExitCode)"
+    exit 1
 }
-exit $exitCode
