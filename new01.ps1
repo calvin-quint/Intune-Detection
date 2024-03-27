@@ -23,7 +23,7 @@ if ($7Zip) {
         Write-Output "Uninstalling 7-Zip version $Version..."
         
         # Define the uninstallation command
-        $UninstallCommand = "/x `"$($7ZipProductCode)`" /qn"
+        $UninstallCommand = "/x", "`"$($7ZipProductCode)`"", "/qn"
         
         # Attempt to uninstall 7-Zip
         $process = Start-Process "msiexec.exe" -ArgumentList $UninstallCommand -PassThru -Wait
